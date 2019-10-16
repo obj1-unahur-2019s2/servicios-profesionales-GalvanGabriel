@@ -1,0 +1,30 @@
+import empresas.*
+import profesionales.*
+
+test "testX" {
+	//Universidades
+	var sanMartin=new Universidad(provincia="buenos aires",honorariosRecomendados=3500, totalDonaciones = 0)	
+	var rosario=new Universidad(provincia="santa fe",honorariosRecomendados=2800, totalDonaciones = 0)
+	var corrientes=new Universidad(provincia="corrientes",honorariosRecomendados=4200, totalDonaciones = 0)
+	var hurlingham=new Universidad(provincia="buenos aires",honorariosRecomendados=8800, totalDonaciones = 0)
+	
+	//Profesionales
+	var juana=new ProfesionalVinculado(universidad=rosario)
+	var melina=new ProfesionalAsociado(universidad=corrientes)
+	var rocio=new ProfesionalLibre(universidad=hurlingham,honorariosPorHora=5000,provincias=#{"santa fe","cordoba","buenos aires"}, totalRecaudado = 0)
+	var luciana=new ProfesionalLibre(universidad=rosario,honorariosPorHora=3200,provincias=#{"santa fe","entre rios"}, totalRecaudado = 0)
+
+	//Empresa
+	var empresarda=new Empresa(profesionales=#{juana,melina,rocio,luciana},honorarioDeReferencia=3500, clientes = 0)
+
+	//Test
+	
+	assert.equals(#{rocio},empresarda.profesionalesCaros())
+	assert.equals(0,empresarda.profesionalesEgresadosDe(sanMartin))
+	assert.equals(#{rosario,corrientes,hurlingham},empresarda.universidadesFormadoras())
+	assert.equals(juana,empresarda.profesionalMasBarato())
+	assert.equals(true,empresarda.tieneGenteAcotada())
+	luciana.provincias().addAll("corrientes", "misiones")
+//	luciana.provincias().add("misiones")
+	assert.equals(false,empresarda.tieneGenteAcotada())
+}
